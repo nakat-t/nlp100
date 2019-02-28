@@ -3,7 +3,7 @@ use std::io::BufRead;
 
 fn main() {
     let app = app_from_crate!()
-        .arg(Arg::from_usage("[NUM] 'print the first NUM lines'").default_value("10"));
+        .arg(Arg::from_usage("[NUM] 'print the tail NUM lines'").default_value("10"));
     let matches = app.get_matches();
 
     let num = matches.value_of("NUM").unwrap();

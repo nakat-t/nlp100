@@ -1,0 +1,9 @@
+[package]
+name = "q16"
+version = "0.1.0"
+authors = ["nakat-t <armaiti.wizard@gmail.com>"]
+description = "nlp100 challenge Q16"
+edition = "2018"
+
+[dependencies]
+clap = "2.32.0"

@@ -4,7 +4,7 @@ use std::collections::HashMap;
 use std::io::BufRead;
 
 #[derive(Serialize, Deserialize, Debug)]
-struct JaWikiCountry {
+struct JaWikiCountryJson {
     text: String,
     title: String,
 }
@@ -19,37 +19,30 @@ fn main() {
     let handle = stdin.lock();
     let mut map = HashMap::new();
     for l in handle.lines() {
-        let entry: JaWikiCountry = serde_json::from_str(&l.unwrap()).expect("Invalid JSON format");
-        map.entry(entry.title.clone()).or_insert(entry);
+        let json: JaWikiCountryJson =
+            serde_json::from_str(&l.unwrap()).expect("Invalid JSON format");
+        map.entry(json.title).or_insert(json.text);
     }
-    if let Some(country) = map.get("イギリス") {
+    if let Some(text) = map.get("イギリス") {
         let re_begin = Regex::new(r"\A\{\{基礎情報").unwrap();
         let re_end = Regex::new(r"\A\}\}").unwrap();
-        let re_entry = Regex::new(r"\|(\S+)\s*=\s*(.*)").unwrap();
-        let mut in_basic_info = false;
-        let mut basic_info: HashMap<String, String> = HashMap::new();
-        let mut entry = String::new();
-        for line in country.text.lines() {
-            if re_begin.is_match(line) {
-                in_basic_info = true;
-            }
-            if re_end.is_match(line) {
-                in_basic_info = false;
-            }
-            if in_basic_info {
-                if let Some(cap) = re_entry.captures(line) {
-                    entry = String::from(&cap[1]);
-                    basic_info
-                        .entry(entry.clone())
-                        .or_insert(delete_markup(&cap[2]));
-                } else {
-                    basic_info.entry(entry.clone()).and_modify(|e| {
-                        *e += "\n";
-                        *e += &delete_markup(line);
-                    });
-                }
+        let re_attr = Regex::new(r"\|(\S+)\s*=\s*(.*)").unwrap();
+        let mut infobox: HashMap<String, String> = HashMap::new();
+        let mut attr = String::new();
+        let infobox_lines = text
+            .lines()
+            .skip_while(|l| !re_begin.is_match(l))
+            .take_while(|l| !re_end.is_match(l));
+        for line in infobox_lines {
+            if let Some(cap) = re_attr.captures(line) {
+                attr = String::from(&cap[1]);
+                infobox.insert(attr.clone(), delete_markup(&cap[2]));
+            } else {
+                infobox
+                    .entry(attr.clone())
+                    .and_modify(|e| *e += &format!("\n{}", delete_markup(line)));
             }
         }
-        println!("{:#?}", basic_info);
+        println!("{:#?}", infobox);
     }
 }

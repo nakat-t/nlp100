@@ -114,7 +114,11 @@ fn main() {
         let mut res = reqwest::get(&req_url).unwrap();
         let body = res.text().unwrap();
         let json: serde_json::Value = serde_json::from_str(&body).unwrap();
-        let file_url = &json["query"]["pages"]["347935"]["imageinfo"][0]["url"];
-        println!("{}", file_url.as_str().unwrap());
+        let pages = &json["query"]["pages"];
+        for v in pages.as_object().unwrap().values() {
+            let file_url = &v["imageinfo"][0]["url"];
+            println!("{}", file_url.as_str().unwrap());
+            break;
+        }
     }
 }

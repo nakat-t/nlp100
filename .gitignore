@@ -11,3 +11,6 @@ target/
 
 # assets/ created by assets_download.sh
 assets/
+
+# Temporary file names that I often use to view output
+r.txt

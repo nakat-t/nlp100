@@ -1,0 +1,8 @@
+[package]
+name = "q38"
+version = "0.1.0"
+authors = ["NAKATANI Tomonari <nakatani@ai-j.jp>"]
+edition = "2018"
+
+[dependencies]
+plotlib = "0.4"

@@ -1,3 +1,4 @@
+use lazy_static::lazy_static;
 use regex::Regex;
 use std::fmt;
 
@@ -75,24 +76,23 @@ pub struct Chunk {
 
 impl Chunk {
     pub fn from_lattice_text(lines: Vec<String>) -> Option<Chunk> {
+        lazy_static! {
+            static ref RE: Regex = Regex::new(r"\A\* (\d+) (-?\d+)D (\d+)/(\d+) (-?\d+\.\d+)").unwrap();
+        }
         if lines.len() < 2 {
-            println!("!!! 1");
             return None;
         }
         let chunk_line = &lines[0];
         let morph_lines = &lines[1..];
-        let re = Regex::new(r"\A\* (\d+) (-?\d+)D (\d+)/(\d+) (-?\d+\.\d+)").unwrap();
-        let cap = match re.captures_iter(&chunk_line).next() {
+        let cap = match RE.captures_iter(&chunk_line).next() {
             Some(cap) => cap,
             None => {
-                println!("!!! 2");
                 return None;
             }
         };
         let id: usize = match &cap[1].parse::<usize>() {
             Ok(n) => *n,
             Err(_) => {
-                println!("!!! 3");
                 return None;
             }
         };
@@ -100,28 +100,24 @@ impl Chunk {
             Ok(n) if *n < 0 => None,
             Ok(n) => Some(*n as usize),
             Err(_) => {
-                println!("!!! 4");
                 return None;
             }
         };
         let head: usize = match &cap[3].parse::<usize>() {
             Ok(n) => *n,
             Err(_) => {
-                println!("!!! 5");
                 return None;
             }
         };
         let func: usize = match &cap[4].parse::<usize>() {
             Ok(n) => *n,
             Err(_) => {
-                println!("!!! 6");
                 return None;
             }
         };
         let score = match &cap[5].parse::<f64>() {
             Ok(n) => *n,
             Err(_) => {
-                println!("!!! 7");
                 return None;
             }
         };
@@ -138,7 +134,6 @@ impl Chunk {
             let morph = match Morpheme::from_text(line) {
                 Some(m) => m,
                 None => {
-                    println!("!!! 8");
                     return None;
                 }
             };

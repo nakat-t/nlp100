@@ -7,3 +7,4 @@ gunzip assets/jawiki-country.json.gz
 wget -O assets/neko.txt http://www.cl.ecei.tohoku.ac.jp/nlp100/data/neko.txt
 mecab < assets/neko.txt > assets/neko.txt.mecab
 cabocha -f 1 < assets/neko.txt > assets/neko.txt.cabocha
+wget -O assets/nlp.txt http://www.cl.ecei.tohoku.ac.jp/nlp100/data/nlp.txt

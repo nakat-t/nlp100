@@ -1,0 +1,9 @@
+[package]
+name = "q51"
+version = "0.1.0"
+authors = ["nakat-t <armaiti.wizard@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+regex = "1"
+failure = "0.1"

@@ -1,0 +1,9 @@
+[package]
+name = "q52"
+version = "0.1.0"
+authors = ["nakat-t <armaiti.wizard@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+failure = "0.1"
+rust-stemmers = "1.1"

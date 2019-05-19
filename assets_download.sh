@@ -8,3 +8,11 @@ wget -O assets/neko.txt http://www.cl.ecei.tohoku.ac.jp/nlp100/data/neko.txt
 mecab < assets/neko.txt > assets/neko.txt.mecab
 cabocha -f 1 < assets/neko.txt > assets/neko.txt.cabocha
 wget -O assets/nlp.txt http://www.cl.ecei.tohoku.ac.jp/nlp100/data/nlp.txt
+wget -O assets/stanford-corenlp-full-2018-10-05.zip http://nlp.stanford.edu/software/stanford-corenlp-full-2018-10-05.zip
+wget -O assets/stanford-english-corenlp-2018-10-05-models.jar http://nlp.stanford.edu/software/stanford-english-corenlp-2018-10-05-models.jar
+unzip -d assets/assets/stanford-corenlp-full-2018-10-05.zip
+mv assets/stanford-english-corenlp-2018-10-05-models.jar assets/stanford-corenlp-full-2018-10-05
+cd assets/stanford-corenlp-full-2018-10-05
+./corenlp.sh -file ../nlp.txt
+mv nlp.txt.xml ../nlp.txt.xml
+cd ../..

@@ -5,13 +5,13 @@ use std::io::prelude::*;
 use std::path::Path;
 use xpath_reader::Reader;
 
-fn write_dot(path: &str, deps: &[(String, String)]) -> Result<(), Error> {
+fn write_dot(path: &str, deps: &[(String, String, String)]) -> Result<(), Error> {
     let path = Path::new(path);
     let mut w = io::BufWriter::new(File::create(&path)?);
     writeln!(w, "digraph \"{}\" {{", path.display())?;
     writeln!(w, "\tnode [ fontname = \"Meiryo\" ];")?;
     for dep in deps {
-        writeln!(w, "\t\"{}\" -> \"{}\"", dep.0, dep.1)?;
+        writeln!(w, "\t\"{}\" -> \"{}\" [label=\"{}\"]", dep.0, dep.1, dep.2)?;
     }
     writeln!(w, "}}")?;
     Ok(())
@@ -31,13 +31,14 @@ fn main() -> Result<(), Error> {
         let deps_nodeset = r.anchor_nodeset().document_order();
         for node in &deps_nodeset {
             let r = Reader::from_node(*node, None);
+            let typ: String = r.read("@type")?;
             let governor: String = r.read("governor")?;
             let governor_idx: u32 = r.read("governor/@idx")?;
             let governor_str = format!("{}:{}", governor_idx, governor);
             let dependent: String = r.read("dependent")?;
             let dependent_idx: u32 = r.read("dependent/@idx")?;
             let dependent_str = format!("{}:{}", dependent_idx, dependent);
-            deps.push((governor_str, dependent_str));
+            deps.push((governor_str, dependent_str, typ));
         }
         let filename = format!("out/sentence{}.dot", i + 1);
         write_dot(&filename, &deps)?;

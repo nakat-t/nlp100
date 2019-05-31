@@ -15,4 +15,6 @@ mv assets/stanford-english-corenlp-2018-10-05-models.jar assets/stanford-corenlp
 cd assets/stanford-corenlp-full-2018-10-05
 ./corenlp.sh -file ../nlp.txt
 mv nlp.txt.xml ../nlp.txt.xml
+./corenlp.sh -file ../nlp.txt -annotators tokenize,ssplit,pos,lemma,ner,parse,dcoref
+mv nlp.txt.xml ../nlp.txt.with_parse.xml
 cd ../..

@@ -18,3 +18,5 @@ mv nlp.txt.xml ../nlp.txt.xml
 ./corenlp.sh -file ../nlp.txt -annotators tokenize,ssplit,pos,lemma,ner,parse,dcoref
 mv nlp.txt.xml ../nlp.txt.with_parse.xml
 cd ../..
+wget -O assets/artist.json.gz http://www.cl.ecei.tohoku.ac.jp/nlp100/data/artist.json.gz
+gunzip assets/artist.json.gz
